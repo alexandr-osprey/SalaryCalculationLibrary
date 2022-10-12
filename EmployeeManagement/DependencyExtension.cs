@@ -8,7 +8,7 @@ public static class EmployeeManagement
     {
         sc.AddSingleton<IEmployeeRepository, EmployeeRepository>()
             .AddSingleton<IEmployeeCreateService, EmployeeCreateService>()
-            .AddSingleton<IGetSubordinatesService, GetSubordinatesService>();
+            .AddSingleton<IEmployeeReadService, EmployeeReadService>();
 
         return sc;
     }

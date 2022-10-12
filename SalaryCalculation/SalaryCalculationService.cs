@@ -13,10 +13,10 @@ public interface ISalaryCalculationService
 
 internal class SalaryCalculationService : ISalaryCalculationService
 {
-    private readonly IGetSubordinatesService _subordinatesService;
+    private readonly IEmployeeReadService _subordinatesService;
     private readonly OwnSalaryCalculationService _ownSalaryService;
 
-    public SalaryCalculationService(IGetSubordinatesService repo, OwnSalaryCalculationService ownSalaryService)
+    public SalaryCalculationService(IEmployeeReadService repo, OwnSalaryCalculationService ownSalaryService)
     {
         _subordinatesService = repo;
         _ownSalaryService = ownSalaryService;

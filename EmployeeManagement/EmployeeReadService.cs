@@ -3,16 +3,16 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement;
 
-public interface IGetSubordinatesService
+public interface IEmployeeReadService
 {
     Task<IReadOnlyCollection<Employee>> GetSubordinatesAsync(IEnumerable<long> ids);
 }
 
-internal class GetSubordinatesService : IGetSubordinatesService
+internal class EmployeeReadService : IEmployeeReadService
 {
     private readonly IEmployeeRepository _repo;
 
-    public GetSubordinatesService(IEmployeeRepository repo)
+    public EmployeeReadService(IEmployeeRepository repo)
     {
         _repo = repo;
     }

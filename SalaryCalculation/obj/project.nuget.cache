@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "1J4iLHSHmEWwyS9UXMxhr/yHvnXBHl9JN66qOkbvs+r+t53z/ofnwwJEA9PpOiPfA/9iro9FxmnfngE3eeNzTg==",
+  "dgSpecHash": "nB0cXdUsPhXYQbPm5W0nemdW/4aO8/DClSBgmIVStEkR/VzdD1v2ILj4emD2p6XxgkERi7qWTPsIJ7UeE7j3UQ==",
   "success": true,
   "projectFilePath": "/app/SalaryCalculation/SalaryCalculation.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/core/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/6.0.0/microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

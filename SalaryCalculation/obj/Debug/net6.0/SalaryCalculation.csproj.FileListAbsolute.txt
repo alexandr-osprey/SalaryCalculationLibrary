@@ -3,3 +3,13 @@
 /app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.AssemblyInfoInputs.cache
 /app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.AssemblyInfo.cs
 /app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.csproj.CoreCompileInputs.cache
+/app/SalaryCalculation/bin/Debug/net6.0/SalaryCalculation.deps.json
+/app/SalaryCalculation/bin/Debug/net6.0/SalaryCalculation.dll
+/app/SalaryCalculation/bin/Debug/net6.0/SalaryCalculation.pdb
+/app/SalaryCalculation/bin/Debug/net6.0/EmployeeManagement.dll
+/app/SalaryCalculation/bin/Debug/net6.0/EmployeeManagement.pdb
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.csproj.CopyComplete
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.dll
+/app/SalaryCalculation/obj/Debug/net6.0/refint/SalaryCalculation.dll
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.pdb
+/app/SalaryCalculation/obj/Debug/net6.0/ref/SalaryCalculation.dll

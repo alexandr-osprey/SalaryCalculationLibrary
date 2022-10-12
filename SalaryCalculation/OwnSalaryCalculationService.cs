@@ -2,9 +2,14 @@ using System;
 using EmployeeManagement;
 using Management.Utils;
 
-namespace Management.SalaryCalculation;
+namespace SalaryCalculation;
 
-internal class OwnSalaryCalculationService
+internal interface IOwnSalaryCalculationService
+{
+    decimal Calculate(Employee employee, DateTime toDate);
+}
+
+internal class OwnSalaryCalculationService : IOwnSalaryCalculationService
 {
     private readonly IDateTimeProvider _dateProvider;
     private readonly IIncreaseSettings _settings;

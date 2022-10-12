@@ -4,16 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using EmployeeManagement;
 
-namespace Management.SalaryCalculation;
+namespace SalaryCalculation;
 
-internal class SalaryCalculationService
+public interface ISalaryCalculationService
 {
-    private readonly EmployeeRepository _repo;
+    Task<decimal> CalculateAsync(Employee employee, DateTime toDate);
+}
+
+internal class SalaryCalculationService : ISalaryCalculationService
+{
+    private readonly IGetSubordinatesService _subordinatesService;
     private readonly OwnSalaryCalculationService _ownSalaryService;
 
-    public SalaryCalculationService(EmployeeRepository repo, OwnSalaryCalculationService ownSalaryService)
+    public SalaryCalculationService(IGetSubordinatesService repo, OwnSalaryCalculationService ownSalaryService)
     {
-        _repo = repo;
+        _subordinatesService = repo;
         _ownSalaryService = ownSalaryService;
     }
 
@@ -27,7 +32,7 @@ internal class SalaryCalculationService
 
         if (employee.Type == EmployeeType.Manager)
         {
-            var subordinates = await _repo.GetSubordinatesAsync(new [] { employee.Id });
+            var subordinates = await _subordinatesService.GetSubordinatesAsync(new[] { employee.Id });
             decimal subordinatesSalarySum = 0;
             foreach (var subordinate in subordinates)
             {
@@ -44,12 +49,13 @@ internal class SalaryCalculationService
             decimal subordinatesSalarySum = 0;
             do
             {
-                var subordinates = await _repo.GetSubordinatesAsync(employeeIds);
+                var subordinates = await _subordinatesService.GetSubordinatesAsync(employeeIds);
                 foreach (var subordinate in subordinates)
                 {
                     subordinatesSalarySum += await CalculateAsync(subordinate, toDate);
                 }
 
+                employeeIds.Clear();
                 employeeIds.AddRange(subordinates.Select(s => s.Id));
             }
             while (employeeIds.Count != 0);

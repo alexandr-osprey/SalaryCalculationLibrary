@@ -29,6 +29,6 @@ public class Employee
     public DateTime EntryDate { get; }
 
     public DateTime? ExitDate { get; }
-    
+
     public decimal BaseRate { get; }
 }

@@ -1,0 +1,5 @@
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.csproj.AssemblyReference.cache
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.GeneratedMSBuildEditorConfig.editorconfig
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.AssemblyInfoInputs.cache
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.AssemblyInfo.cs
+/app/SalaryCalculation/obj/Debug/net6.0/SalaryCalculation.csproj.CoreCompileInputs.cache

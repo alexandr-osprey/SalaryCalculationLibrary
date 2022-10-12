@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  coredev:
+    image: coredev
+    build:
+      context: .
+      # dockerfile: ./dev/Dockerfile
+    working_dir: /app
+    # environment:
+    # ports:
+    #   - 3000:3000
+    #   - 9229:9229
+    volumes:
+      - "..:/app"
+    command: sleep infinity

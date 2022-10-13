@@ -42,7 +42,7 @@ public class OwnSalaryCalculationServiceTests
     {
         // Arrange
         var toDate = DateTime.Now.AddYears(-4);
-        var employee = new Employee(1, 2, EmployeeType.Employee, toDate.AddYears(-3), null, 1000);
+        var employee = new Employee(1, 2, EmployeeType.Employee, toDate.AddYears(3), null, 1000);
 
         // Act
         decimal salary = _service.Calculate(employee, toDate);

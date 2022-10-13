@@ -36,6 +36,23 @@ public class SalaryCalculationServiceTests
     }
 
     [Fact]
+    public async Task CalculateAsync__FiredEmployee__Zero()
+    {
+        // Given
+        var toDate = DateTime.Now.AddDays(-3);
+        var employee = new Employee(1, 10, EmployeeType.Employee, DateTime.MinValue, toDate.AddDays(-4), 1000);
+
+        // When
+        decimal salary = await _service.CalculateAsync(employee, toDate);
+
+        // Then
+        Assert.Equal(0, salary);
+        _ownSalaryService.VerifyAll();
+        _readService.VerifyAll();
+        _settings.VerifyAll();
+    }
+
+    [Fact]
     public async Task CalculateAsync__Manager__Calculated()
     {
         // Given

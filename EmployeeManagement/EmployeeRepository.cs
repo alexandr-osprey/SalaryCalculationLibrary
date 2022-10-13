@@ -9,12 +9,12 @@ namespace EmployeeManagement;
 
 internal class EmployeeRepository : IEmployeeRepository
 {
-    private readonly BlockingCollection<Employee> _employees;
+    private readonly List<Employee> _employees;
     private long _counter;
 
     public EmployeeRepository()
     {
-        _employees = new BlockingCollection<Employee>();
+        _employees = new List<Employee>();
     }
 
     public async Task<long> CreateEmployeeAsync(UnsavedEmployee unsaved)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using EmployeeManagement;
 
@@ -13,32 +14,45 @@ internal class CompanySalaryCalculationService : ICompanySalaryCalculationServic
 {
     private readonly ISalaryCalculationService _calcService;
     private readonly IEmployeeReadService _employeeReadService;
+    private readonly ISynchronizationHelper _syncHelper;
 
     public CompanySalaryCalculationService(
         ISalaryCalculationService calcService,
-        IEmployeeReadService employeeReadService)
+        IEmployeeReadService employeeReadService,
+        ISynchronizationHelper syncHelper)
     {
         _calcService = calcService;
         _employeeReadService = employeeReadService;
+        _syncHelper = syncHelper;
     }
 
     public async Task<decimal> CalculateForAllAsync(DateTime toDate)
     {
-        int taken = 0;
+        int totalTaken = 0;
         const int take = 100;
         decimal totalSalary = 0;
-        do
+        var cache = new Dictionary<long, decimal>();
+        _syncHelper.StartRead();
+        try
         {
-            var employees = await _employeeReadService.GetAllEmployeesAsync(toDate, taken, take);
-            foreach (var e in employees)
+            int taken = 0;
+            do
             {
-                totalSalary += await _calcService.CalculateAsync(e, toDate);
+                var employees = await _employeeReadService.GetAllEmployeesAsync(toDate, totalTaken, take);
+                foreach (var e in employees)
+                {
+                    totalSalary += await _calcService.CalculateAsync(e, toDate, cache);
+                }
+
+                taken = employees.Count;
+                totalTaken += taken;
             }
-
-            taken += employees.Count;
+            while (taken > 0);
+            return totalSalary;
         }
-        while (taken > 0);
-
-        return totalSalary;
+        finally
+        {
+            _syncHelper.EndRead();
+        }
     }
 }

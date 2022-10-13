@@ -14,19 +14,41 @@ public interface IEmployeeReadService
 internal class EmployeeReadService : IEmployeeReadService
 {
     private readonly IEmployeeRepository _repo;
+    private readonly ISynchronizationHelper _syncHelper;
 
-    public EmployeeReadService(IEmployeeRepository repo)
+    public EmployeeReadService(
+        IEmployeeRepository repo,
+        ISynchronizationHelper syncHelper)
     {
         _repo = repo;
+        _syncHelper = syncHelper;
     }
 
     public async Task<IReadOnlyCollection<Employee>> GetSubordinatesAsync(IEnumerable<long> ids)
     {
-        return await _repo.GetSubordinatesAsync(ids);
+        _syncHelper.StartRead();
+        try
+        {
+            return await _repo.GetSubordinatesAsync(ids);
+
+        }
+        finally
+        {
+            _syncHelper.EndRead();
+        }
     }
 
     public async Task<IReadOnlyCollection<Employee>> GetAllEmployeesAsync(DateTime toDate, int skip, int take)
     {
-        return await _repo.GetAllEmployeesAsync(toDate, skip, take);
+        _syncHelper.StartRead();
+        try
+        {
+            return await _repo.GetAllEmployeesAsync(toDate, skip, take);
+
+        }
+        finally
+        {
+            _syncHelper.EndRead();
+        }
     }
 }

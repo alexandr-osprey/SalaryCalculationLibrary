@@ -18,4 +18,4 @@ public class IncreaseSettings : IIncreaseSettings
     public IReadOnlyDictionary<EmployeeType, IncreasePercent> Increases { get; }
 }
 
-public record IncreasePercent(double Yearly, double Max);
+public record IncreasePercent(double Yearly, double Max, double Subordinates);

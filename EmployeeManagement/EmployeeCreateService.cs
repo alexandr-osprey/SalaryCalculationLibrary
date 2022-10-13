@@ -6,15 +6,17 @@ namespace EmployeeManagement;
 internal class EmployeeCreateService : IEmployeeCreateService
 {
     private readonly IEmployeeRepository _repo;
+    private readonly ISynchronizationHelper _syncHelper;
 
-    public EmployeeCreateService(IEmployeeRepository repo)
+    public EmployeeCreateService(IEmployeeRepository repo, ISynchronizationHelper syncHelper)
     {
         _repo = repo;
+        _syncHelper = syncHelper;
     }
 
     public async Task<Employee> CreateEmployeeAsync(UnsavedEmployee unsaved)
     {
-        if (unsaved.BossId == 0 || unsaved.Type != EmployeeType.Manager)
+        if (unsaved.BossId == 0 && unsaved.Type != EmployeeType.Manager)
         {
             throw new ArgumentException($"{unsaved.Type} should have a boss");
         }
@@ -29,8 +31,17 @@ internal class EmployeeCreateService : IEmployeeCreateService
             }
         }
 
-        long id = await _repo.CreateEmployeeAsync(unsaved);
-        return await _repo.GetEmployeeAsync(id)
-            ?? throw new InvalidOperationException("Employee not created");
+        _syncHelper.StartWrite();
+        try
+        {
+
+            long id = await _repo.CreateEmployeeAsync(unsaved);
+            return await _repo.GetEmployeeAsync(id)
+                ?? throw new InvalidOperationException("Employee not created");
+        }
+        finally
+        {
+            _syncHelper.EndWrite();
+        }
     }
 }

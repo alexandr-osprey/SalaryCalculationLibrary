@@ -8,25 +8,43 @@ namespace SalaryCalculation;
 
 public interface ISalaryCalculationService
 {
-    Task<decimal> CalculateAsync(Employee employee, DateTime toDate);
+    Task<decimal> CalculateAsync(Employee employee, DateTime toDate, IDictionary<long, decimal>? cache = null);
 }
 
 internal class SalaryCalculationService : ISalaryCalculationService
 {
     private readonly IEmployeeReadService _subordinatesService;
-    private readonly OwnSalaryCalculationService _ownSalaryService;
+    private readonly IOwnSalaryCalculationService _ownSalaryService;
+    private readonly IIncreaseSettings _increaseSettings;
 
-    public SalaryCalculationService(IEmployeeReadService repo, OwnSalaryCalculationService ownSalaryService)
+    public SalaryCalculationService(
+        IEmployeeReadService repo,
+        IOwnSalaryCalculationService ownSalaryService,
+        IIncreaseSettings increaseSettings)
     {
         _subordinatesService = repo;
         _ownSalaryService = ownSalaryService;
+        _increaseSettings = increaseSettings;
     }
 
-    public async Task<decimal> CalculateAsync(Employee employee, DateTime toDate)
+    public async Task<decimal> CalculateAsync(Employee employee, DateTime toDate, IDictionary<long, decimal>? cache = null)
     {
+        long id = employee.Id;
+        if (cache?.TryGetValue(id, out decimal cached) ?? false)
+        {
+            return cached;
+        }
+
+        if (employee.ExitDate is not null && toDate > employee.ExitDate)
+        {
+            cache?.Add(id, 0);
+            return 0;
+        }
+
         decimal ownSalary = _ownSalaryService.Calculate(employee, toDate);
         if (employee.Type == EmployeeType.Employee)
         {
+            cache?.Add(id, ownSalary);
             return ownSalary;
         }
 
@@ -36,10 +54,13 @@ internal class SalaryCalculationService : ISalaryCalculationService
             decimal subordinatesSalarySum = 0;
             foreach (var subordinate in subordinates)
             {
-                subordinatesSalarySum += await CalculateAsync(subordinate, toDate);
+                subordinatesSalarySum += await CalculateAsync(subordinate, toDate, cache);
             }
 
-            return ownSalary + subordinatesSalarySum;
+            decimal subPercent = (decimal)_increaseSettings.Increases[EmployeeType.Manager].Subordinates;
+            decimal totalSalary = ownSalary + (subordinatesSalarySum * subPercent);
+            cache?.Add(id, totalSalary);
+            return totalSalary;
         }
 
         if (employee.Type == EmployeeType.Sales)
@@ -52,7 +73,7 @@ internal class SalaryCalculationService : ISalaryCalculationService
                 var subordinates = await _subordinatesService.GetSubordinatesAsync(employeeIds);
                 foreach (var subordinate in subordinates)
                 {
-                    subordinatesSalarySum += await CalculateAsync(subordinate, toDate);
+                    subordinatesSalarySum += await CalculateAsync(subordinate, toDate, cache);
                 }
 
                 employeeIds.Clear();
@@ -60,7 +81,10 @@ internal class SalaryCalculationService : ISalaryCalculationService
             }
             while (employeeIds.Count != 0);
 
-            return ownSalary + subordinatesSalarySum;
+            decimal subPercent = (decimal)_increaseSettings.Increases[EmployeeType.Sales].Subordinates;
+            decimal totalSalary = ownSalary + (subordinatesSalarySum * subPercent);
+            cache?.Add(id, totalSalary);
+            return totalSalary;
         }
 
         throw new ArgumentException($"Unsupported employee type {employee.Type}");

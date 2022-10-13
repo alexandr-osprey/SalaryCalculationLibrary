@@ -1,12 +1,24 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TestApp;
+using EmployeeManagement;
+using SalaryCalculation;
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+namespace TestApp;
+
+internal static class Program
+{
+    private static async Task Main(string[] args)
     {
-        services.AddHostedService<Worker>();
-    })
-    .Build();
+        IHost host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices(services =>
+            {
+                services.AddHostedService<Worker>()
+                    .AddEmployeeManagement()
+                    .AddSalaryCalculation();
+            })
+            .Build();
 
-await host.RunAsync();
+        await host.RunAsync();
+    }
+}

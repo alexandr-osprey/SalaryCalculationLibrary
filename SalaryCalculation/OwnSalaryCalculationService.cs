@@ -29,18 +29,13 @@ internal class OwnSalaryCalculationService : IOwnSalaryCalculationService
             return 0;
         }
 
-        if (employee.ExitDate is not null && toDate > employee.ExitDate)
-        {
-            return 0;
-        }
-
         var increase = _settings.Increases[employee.Type];
         decimal maxSalary = baseRate * (1 + (decimal)increase.Max);
         double years = _dateProvider.GetYearsDiff(entryDate, toDate);
         decimal yearsSalary = baseRate;
         for (int i = 0; i < years; i++)
         {
-            yearsSalary += i * (decimal)increase.Yearly * yearsSalary;
+            yearsSalary += (decimal)increase.Yearly * yearsSalary;
         }
 
         return Math.Min(maxSalary, yearsSalary);

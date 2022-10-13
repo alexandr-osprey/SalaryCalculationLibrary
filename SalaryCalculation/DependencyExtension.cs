@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using EmployeeManagement;
-using Management.Utils;
+using SalaryCalculation.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SalaryCalculation;

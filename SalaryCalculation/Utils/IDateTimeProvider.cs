@@ -1,10 +1,8 @@
 using System;
 
-namespace Management.Utils;
+namespace SalaryCalculation.Utils;
 
 public interface IDateTimeProvider
 {
-    DateTime GetNow();
-
     int GetYearsDiff(DateTime start, DateTime end);
 }

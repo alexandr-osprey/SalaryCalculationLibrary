@@ -1,6 +1,6 @@
 using System;
 using EmployeeManagement;
-using Management.Utils;
+using SalaryCalculation.Utils;
 
 namespace SalaryCalculation;
 

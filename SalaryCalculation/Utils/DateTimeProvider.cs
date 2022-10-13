@@ -1,14 +1,9 @@
 using System;
 
-namespace Management.Utils;
+namespace SalaryCalculation.Utils;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    public DateTime GetNow()
-    {
-        return DateTime.UtcNow;
-    }
-
     public int GetYearsDiff(DateTime start, DateTime end)
     {
         return (end.Year - start.Year - 1) +

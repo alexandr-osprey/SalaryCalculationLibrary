@@ -32,16 +32,10 @@ internal class EmployeeRepository : IEmployeeRepository
         return id;
     }
 
-    public Task UpdateEmployeeAsync(Employee employee)
-    {
-        // stub method, because the instance is already up to date in the list
-        return Task.CompletedTask;
-    }
-
     public async Task<Employee?> GetEmployeeAsync(long id)
     {
         await Task.CompletedTask;
-        return _employees.FirstOrDefault(e => e.Id == id);
+        return _employees.Find(e => e.Id == id);
     }
 
     public async Task<IReadOnlyCollection<Employee>> GetSubordinatesAsync(IEnumerable<long> ids)
@@ -54,7 +48,7 @@ internal class EmployeeRepository : IEmployeeRepository
     public async Task<IReadOnlyCollection<Employee>> GetAllEmployeesAsync(DateTime toDate, int skip, int take)
     {
         await Task.CompletedTask;
-        return _employees.Where(e => e.ExitDate is null || e.ExitDate < toDate)
+        return _employees.FindAll(e => e.ExitDate is null || e.ExitDate < toDate)
             .Skip(skip)
             .Take(take)
             .ToArray();

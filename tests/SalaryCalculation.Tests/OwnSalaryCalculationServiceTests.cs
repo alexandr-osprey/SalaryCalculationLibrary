@@ -38,6 +38,22 @@ public class OwnSalaryCalculationServiceTests
     }
 
     [Fact]
+    public void Calculate__ToDateLessThanEntryDate__Zero()
+    {
+        // Arrange
+        var toDate = DateTime.Now.AddYears(-4);
+        var employee = new Employee(1, 2, EmployeeType.Employee, toDate.AddYears(-3), null, 1000);
+
+        // Act
+        decimal salary = _service.Calculate(employee, toDate);
+
+        // Assert
+        Assert.Equal(0M, salary);
+        _dateProvider.VerifyAll();
+        _settings.VerifyAll();
+    }
+
+    [Fact]
     public void Calculate__WorkingEmployeeSalaryMoreThanMax__MaxReturned()
     {
         // Arrange

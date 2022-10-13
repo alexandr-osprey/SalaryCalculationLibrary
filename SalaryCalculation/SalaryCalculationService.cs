@@ -13,7 +13,7 @@ public interface ISalaryCalculationService
 
 internal class SalaryCalculationService : ISalaryCalculationService
 {
-    private readonly IEmployeeReadService _subordinatesService;
+    private readonly IEmployeeReadService _readService;
     private readonly IOwnSalaryCalculationService _ownSalaryService;
     private readonly IIncreaseSettings _increaseSettings;
 
@@ -22,7 +22,7 @@ internal class SalaryCalculationService : ISalaryCalculationService
         IOwnSalaryCalculationService ownSalaryService,
         IIncreaseSettings increaseSettings)
     {
-        _subordinatesService = repo;
+        _readService = repo;
         _ownSalaryService = ownSalaryService;
         _increaseSettings = increaseSettings;
     }
@@ -50,7 +50,7 @@ internal class SalaryCalculationService : ISalaryCalculationService
 
         if (employee.Type == EmployeeType.Manager)
         {
-            var subordinates = await _subordinatesService.GetSubordinatesAsync(new[] { employee.Id });
+            var subordinates = await _readService.GetSubordinatesAsync(new[] { employee.Id });
             decimal subordinatesSalarySum = 0;
             foreach (var subordinate in subordinates)
             {
@@ -70,7 +70,7 @@ internal class SalaryCalculationService : ISalaryCalculationService
             decimal subordinatesSalarySum = 0;
             do
             {
-                var subordinates = await _subordinatesService.GetSubordinatesAsync(employeeIds);
+                var subordinates = await _readService.GetSubordinatesAsync(employeeIds);
                 foreach (var subordinate in subordinates)
                 {
                     subordinatesSalarySum += await CalculateAsync(subordinate, toDate, cache);
